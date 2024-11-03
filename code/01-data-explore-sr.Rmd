@@ -4,3 +4,199 @@ output: html_document
 date: "2024-11-02"
 ---
 
+Data in 
+
+
+https://owl.fish.washington.edu/nightingales/P_helianthoides/PSC-05*gz
+
+```{bash}
+wget -r \
+--no-directories --no-parent \
+-P ../data/raw/ \
+-A "PSC-05*gz" https://owl.fish.washington.edu/nightingales/P_helianthoides/
+
+```
+
+```
+517 dermasterias_imbricata multispecies exposed 12 1 2023-08-02 2024-06-06 15 2024-06-06 1 14 25.6 78.91 1347.2 358.4  
+
+523 dermasterias_imbricata multispecies exposed 12 2 2023-08-02 2024-06-06 15 2024-06-06 1 14 5.3 78.91 1347.2 74.2  
+
+529 dermasterias_imbricata multispecies exposed 12 3 2023-08-02 2024-06-06 15 2024-06-06 1 14 12.4 78.91 1347.2 173.6  
+
+535 dermasterias_imbricata multispecies exposed 12 4 2023-08-02 2024-06-06 15 2024-06-06 1 14 37.8 78.91 1347.2 529.2  
+
+547 dermasterias_imbricata multispecies exposed 12 6 2023-08-02 2024-06-07 15 2024-06-07 1 14 46.2 79.79 1422.14 646.8  
+
+559 dermasterias_imbricata multispecies exposed 12 8 2023-08-02 2024-06-07 15 2024-06-07 1 14 118 79.79 1422.14 1652  
+```
+```{bash}
+export PATH=/home/shared/jellyfish-2.3.0/bin:$PATH
+export PATH=/home/shared/bowtie2-2.4.4-linux-x86_64/:$PATH
+export PATH=/home/shared/salmon-1.4.0_linux_x86_64/bin:$PATH
+/home/shared/trinityrnaseq-v2.12.0/Trinity \
+--seqType fq \
+--max_memory 50G \
+--CPU 8 \
+--left ../data/raw/der/PSC-0517_R1_001.fastq.gz \
+--right ../data/raw/der/PSC-0517_R2_001.fastq.gz \
+--output ../output/01-data-explore/trinity
+```
+
+
+changed output to trinity-der
+
+Lets blast it 
+
+
+```{bash}
+fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/01-data-explore/der_blastx_sp.tab \
+-evalue 1E-05 \
+-num_threads 10 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+#kallisto
+
+```{bash}
+/home/shared/kallisto/kallisto \
+index -i \
+../output/01-data-explore/trinity-der/der-trinity.index \
+../output/01-data-explore/trinity-der/der-trinity.fa
+```
+
+```{bash}
+find ../data/raw/der/*_R1_001.fastq.gz \
+| xargs basename -s _R1_001.fastq.gz | xargs -I{} /home/shared/kallisto/kallisto \
+quant -i ../output/01-data-explore/trinity-der/der-trinity.index \
+-o ../output/01-data-explore/kallisto-der/{} \
+-t 10 \
+../data/raw/der/{}_R1_001.fastq.gz ../data/raw/der/{}_R2_001.fastq.gz
+```
+
+
+
+# PYC
+
+
+```
+export PATH=/home/shared/jellyfish-2.3.0/bin:$PATH
+export PATH=/home/shared/bowtie2-2.4.4-linux-x86_64/:$PATH
+export PATH=/home/shared/salmon-1.4.0_linux_x86_64/bin:$PATH
+/home/shared/trinityrnaseq-v2.12.0/Trinity \
+--seqType fq \
+--max_memory 100G \
+--CPU 32 \
+--left ../data/raw/pyc/PSC-0519_R1_001.fastq.gz \
+--right ../data/raw/pyc/PSC-0519_R2_001.fastq.gz \
+--output ../output/01-data-explore/trinity-pyc
+```
+
+
+```
+cp ../output/01-data-explore/trinity-pyc/Trinity.fasta \
+../output/01-data-explore/trinity-pyc/pyc_trinity.fa
+```
+
+
+
+# Blast 
+
+```{bash}
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2024_05.fasta.gz
+gunzip -k uniprot_sprot_r2024_05.fasta.gz
+```
+
+
+
+```{bash}
+/home/shared/ncbi-blast-2.15.0+/bin/makeblastdb \
+-in uniprot_sprot_r2024_05.fasta \
+-dbtype prot \
+-out uniprot_sprot_r2024_05
+```
+
+
+```{bash}
+fasta="../output/01-data-explore/trinity-pyc/pyc_trinity.fa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/01-data-explore/pyc_blastx_sp.tab \
+-evalue 1E-05 \
+-num_threads 20 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{r, engine='bash'}        
+wc -l ../output/20-Apul-gene-annotation/blastp_out.tab
+```
+
+
+```{r, engine='bash'}         
+tr '|' '\t' < ../output/20-Apul-gene-annotation/blastp_out.tab \
+> ../output/20-Apul-gene-annotation/blastp_out_sep.tab
+
+head -1 ../output/20-Apul-gene-annotation/blastp_out_sep.tab
+```
+
+
+
+
+
+
+
+
+
+#kallisto
+
+```{bash}
+/home/shared/kallisto/kallisto \
+index -i \
+../data/cgigas_roslin_rna.index \
+../data/rna.fna
+```
+
+```{bash}
+find ../data/raw/pyc/*_R1_001.fastq.gz \
+| xargs basename -s _R1_001.fastq.gz | xargs -I{} /home/shared/kallisto/kallisto \
+quant -i .../output/01-data-explore/trinity-pyc/pyc_trinity.index \
+-o ../output/01-data-explore/kallisto-pyc/{} \
+-t 4 \
+../data/raw/pyc/{}_R1_001.fastq.gz ../data/raw/pyc/{}_R2_001.fastq.gz
+```
+
+```
+perl /home/shared/trinityrnaseq-v2.12.0/util/abundance_estimates_to_matrix.pl \
+--est_method kallisto \
+    --gene_trans_map none \
+    --out_prefix ../output/01-data-explore/kallisto-pyc \
+    --name_sample_by_basedir \
+    ../output/01-data-explore/kallisto-pyc/PSC-0519/abundance.tsv \
+    ../output/01-data-explore/kallisto-pyc/PSC-0525/abundance.tsv \
+    ../output/01-data-explore/kallisto-pyc/PSC-0531/abundance.tsv \
+    ../output/01-data-explore/kallisto-pyc/PSC-0537/abundance.tsv \
+    ../output/01-data-explore/kallisto-pyc/PSC-0549/abundance.tsv \
+    ../output/01-data-explore/kallisto-pyc/PSC-0561/abundance.tsv 
+```
+
+
+# Genes total expression
+
+
+# DAVID - subset - genes with High Expression
+
+
+# Revigo
+
