@@ -109,6 +109,24 @@ blastn \
 > ../output/02-blast-klonetest/der_blastn40_pyc.out 2>&1
 ```
 
+
+```{bash}
+fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
+
+blastn \
+-query $fasta \
+-db ../data/blastdb/pyc_trinity \
+-out ../output/02-blast-klonetest/der_blastn05_pyc.tab \
+-task blastn \
+-evalue 1E-05 \
+-num_threads 30 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+> ../output/02-blast-klonetest/der_blastn40_pyc.out 2>&1
+```
+
+
 What is unique in DER
 
 Der full table
@@ -126,27 +144,30 @@ perl -e '$count=0; $len=0; while(<>) {s/\r?\n//; s/\t/ /g; if (s/^>//) { if ($. 
 
 
 
-
-```{bash}
-input_file="../output/01-data-explore/trinity-der/der-trinity.fa"
-output_file="../output/02-blast-klonetest/trinity-der.tab"
-
-
-# Clear the output file to avoid appending to an existing file
-> "$output_file"
-
-# Read the input FASTA file line by line
-while read -r line; do
-    if [[ $line == ">"* ]]; then
-        # Print the header (remove the '>') and write it to the output file
-        header=${line#>}
-        echo -e "$header" >> "$output_file"
-    fi
-done < "$input_file"
-```
-
-
 ```{bash}
 head ../output/02-blast-klonetest/trinity-der.tab
 ```
+
+
+Join full der to der/pyc blast to get unique der
+
+```{r}
+library(tidyverse)
+
+der <- read_tsv("../output/02-blast-klonetest/trinity-der.tab", col_names = FALSE)
+
+der <- der %>%
+  separate(X1, into = c("DerID", "part2"), sep = " ", extra = "merge")
+
+derpyc <- read_tsv("../output/02-blast-klonetest/der_blastn_pyc.tab", col_names = FALSE)
+
+# Perform anti-join to keep only unique rows in table1 that are not in table2
+der_uniq <- anti_join(der, derpyc, by = c("DerID" = "X1"))
+ # Change "id" to the column(s) you want to match on
+
+
+
+```
+
+
 
