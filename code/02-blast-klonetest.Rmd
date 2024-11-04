@@ -4,4 +4,37 @@ output: html_document
 date: "2024-11-04"
 ---
 
-test
+
+```{bash}
+cd ../data/blastdb
+
+curl -O https://ftp.uniprot.org/pub/databases/uniprot/current_release/knowledgebase/complete/uniprot_sprot.fasta.gz
+mv uniprot_sprot.fasta.gz uniprot_sprot_r2024_05.fasta.gz
+gunzip -k uniprot_sprot_r2024_05.fasta.gz
+```
+
+
+
+```{bash}
+cd ../data/blastdb
+makeblastdb \
+-in uniprot_sprot_r2024_05.fasta \
+-dbtype prot \
+-out uniprot_sprot_r2024_05
+```
+
+
+
+```{bash}
+fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
+
+blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/01-data-explore/der_blastx_sp.tab \
+-evalue 1E-05 \
+-num_threads 10 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
