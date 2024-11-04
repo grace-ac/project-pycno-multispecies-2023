@@ -134,6 +134,7 @@ Der full table
 
 ```{bash}
 head ../output/01-data-explore/trinity-der/der-trinity.fa
+grep -c  ">" ../output/01-data-explore/trinity-der/der-trinity.fa
 ```
 
 ```{bash}
@@ -159,7 +160,7 @@ der <- read_tsv("../output/02-blast-klonetest/trinity-der.tab", col_names = FALS
 der <- der %>%
   separate(X1, into = c("DerID", "part2"), sep = " ", extra = "merge")
 
-derpyc <- read_tsv("../output/02-blast-klonetest/der_blastn_pyc.tab", col_names = FALSE)
+derpyc <- read_tsv("../output/02-blast-klonetest/der_blastn05_pyc.tab", col_names = FALSE)
 
 # Perform anti-join to keep only unique rows in table1 that are not in table2
 der_uniq <- anti_join(der, derpyc, by = c("DerID" = "X1"))
