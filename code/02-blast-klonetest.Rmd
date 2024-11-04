@@ -24,6 +24,18 @@ makeblastdb \
 ```
 
 
+```{bash}
+cd ../output/01-data-explore/trinity-der
+
+curl -O https://gannet.fish.washington.edu/seashell/snaps/der-trinity.fa
+```
+
+
+
+```{bash}
+head ../output/01-data-explore/trinity-der/*
+```
+
 
 ```{bash}
 fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
@@ -31,10 +43,27 @@ fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
 blastx \
 -query $fasta \
 -db ../data/blastdb/uniprot_sprot_r2024_05 \
--out ../output/01-data-explore/der_blastx_sp.tab \
+-out ../output/02-blast-klonetest/der_blastx_sp.tab \
 -evalue 1E-05 \
--num_threads 10 \
+-num_threads 30 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6
 ```
+
+```{bash}
+wc -l ../output/02-blast-klonetest/der_blastx_sp.tab
+```
+
+
+```{bash}
+echo "blast finished" 
+```
+
+
+# blast der to pyc;
+
+
+
+
+
