@@ -80,7 +80,7 @@ quant -i ../output/01-data-explore/trinity-der/der-trinity.index \
 ../data/raw/der/{}_R1_001.fastq.gz ../data/raw/der/{}_R2_001.fastq.gz
 ```
 
-
+d
 
 # PYC
 

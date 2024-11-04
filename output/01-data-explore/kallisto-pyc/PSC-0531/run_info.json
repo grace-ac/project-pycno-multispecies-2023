@@ -1,0 +1,13 @@
+{
+	"n_targets": 141497,
+	"n_bootstraps": 0,
+	"n_processed": 28888678,
+	"n_pseudoaligned": 21911185,
+	"n_unique": 9139703,
+	"p_pseudoaligned": 75.8,
+	"p_unique": 31.6,
+	"kallisto_version": "0.46.1",
+	"index_version": 10,
+	"start_time": "Sat Nov  2 21:58:06 2024",
+	"call": "/home/shared/kallisto/kallisto quant -i ../output/01-data-explore/trinity-pyc/pyc_trinity.index -o ../output/01-data-explore/kallisto-pyc/PSC-0531 -t 4 ../data/raw/pyc/PSC-0531_R1_001.fastq.gz ../data/raw/pyc/PSC-0531_R2_001.fastq.gz"
+}
