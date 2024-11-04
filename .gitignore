@@ -6,3 +6,4 @@ data/blastdb
 data/raw/
 output/01-data-explore/trinity
 output/01-data-explore/trinity-pyc
+output/01-data-explore
