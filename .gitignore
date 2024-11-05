@@ -10,4 +10,5 @@ output/04-pyc-hisat/*
 data/ncbi_dataset/*
 data/genome*
 data/Swiss*
+output/05-pis-annot/trinity
 
