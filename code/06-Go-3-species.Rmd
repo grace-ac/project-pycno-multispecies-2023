@@ -1,0 +1,119 @@
+---
+title: "06-Go-3-species"
+output: github_document
+date: "2024-11-05"
+---
+
+Lets get GO annotations for der, pis, pyc....
+
+
+# der 
+
+```
+fasta="../output/01-data-explore/trinity-der/der-trinity.fa"
+
+blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/02-blast-klonetest/der_blastx_sp.tab \
+-evalue 1E-05 \
+-num_threads 30 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{bash}
+head ../output/02-blast-klonetest/der_blastx_sp.tab
+```
+
+
+```{bash}
+tr '|' '\t' < ../output/02-blast-klonetest/der_blastx_sp.tab \
+> ../output/06-Go-3-species/der_blastx_sep.tab
+
+head -1 ../output/06-Go-3-species/der_blastx_sep.tab
+
+```
+
+
+join 
+
+```{r}
+library(tidyverse)
+
+derbl <- read_tsv("../output/06-Go-3-species/der_blastx_sep.tab", col_names = FALSE)
+
+sp_go <- read_tsv("../data/SwissProt-Annot.tsv", col_names = TRUE)
+
+```
+```{r}
+
+der_go <- left_join(derbl, sp_go, by = c("X3" = "Entry"))
+```
+
+```{r}
+write_tsv(der_go, "../output/06-Go-3-species/der_go.tsv")
+```
+
+```{bash}
+head ../output/06-Go-3-species/der_go.tsv
+
+```
+
+
+# pyc
+
+```
+fasta="../output/01-data-explore/trinity-pyc/pyc_trinity.fa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/01-data-explore/pyc_blastx_sp.tab \
+-evalue 1E-05 \
+-num_threads 20 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6
+```
+
+```{bash}
+head ../output/01-data-explore/pyc_blastx_sp.tab
+```
+
+
+```{bash}
+tr '|' '\t' < ../output/01-data-explore/pyc_blastx_sp.tab \
+> ../output/06-Go-3-species/pyc_blastx_sep.tab
+
+head -1 ../output/06-Go-3-species/pyc_blastx_sep.tab
+
+```
+
+
+join 
+
+```{r}
+library(tidyverse)
+
+pycbl <- read_tsv("../output/06-Go-3-species/pyc_blastx_sep.tab", col_names = FALSE)
+
+sp_go <- read_tsv("../data/SwissProt-Annot.tsv", col_names = TRUE)
+
+```
+```{r}
+
+pyc_go <- left_join(pycbl, sp_go, by = c("X3" = "Entry"))
+```
+
+```{r}
+write_tsv(pyc_go, "../output/06-Go-3-species/pyc_go.tsv")
+```
+
+```{bash}
+head ../output/06-Go-3-species/pyc_go.tsv
+
+```
+
+# pis 
