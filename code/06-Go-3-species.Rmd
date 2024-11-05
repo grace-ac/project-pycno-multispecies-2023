@@ -1,0 +1,8 @@
+---
+title: "06-Go-3-species"
+output: html_document
+date: "2024-11-05"
+---
+
+Lets get GO annoations for der, pis, pyc....
+
