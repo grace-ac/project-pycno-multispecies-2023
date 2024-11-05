@@ -1,0 +1,18 @@
+---
+title: "05-pis-annot"
+output: html_document
+date: "2024-11-05"
+---
+
+lets trinity up a pis file..
+
+
+```{bash}
+Trinity \
+--seqType fq \
+--max_memory 100G \
+--CPU 30 \
+--left ../data/raw/der/PSC-0517_R1_001.fastq.gz \
+--right ../data/raw/der/PSC-0517_R2_001.fastq.gz \
+--output ../output/01-data-explore/trinity
+```
