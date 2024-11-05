@@ -6,3 +6,8 @@ data/blastdb
 data/raw/
 output/01-data-explore/trinity-der
 output/01-data-explore/trinity-pyc
+output/04-pyc-hisat/*
+data/ncbi_dataset/*
+data/genome*
+data/Swiss*
+
