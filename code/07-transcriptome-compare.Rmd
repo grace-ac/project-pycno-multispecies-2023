@@ -1,0 +1,15 @@
+---
+title: "07-transcriptome-compare"
+output: html_document
+date: "2024-11-06"
+---
+
+Two "GO Slim" count tables
+
+```{bash}
+cd ../output/
+
+curl -O https://raw.githubusercontent.com/RobertsLab/code/refs/heads/master/r_projects/sam/20241106-phel-GO-to-GOslim/output/01-GO-to-GOslim/counts.GOID-per-GOslim_term.tab
+```
+
+
