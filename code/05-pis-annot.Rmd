@@ -30,3 +30,22 @@ export PATH=/home/shared/salmon-1.4.0_linux_x86_64/bin:$PATH
 --right ../data/raw/pis/PSC-0518_R2_001.fastq.gz \
 --output ../output/05-pis-annot/trinity
 ```
+
+
+```{bash}
+fasta="../output/05-pis-annot/trinity/pis-trinity.fa"
+
+/home/shared/ncbi-blast-2.15.0+/bin/blastx \
+-query $fasta \
+-db ../data/blastdb/uniprot_sprot_r2024_05 \
+-out ../output/06-Go-3-species/pis_blastx_sp-raven.tab \
+-evalue 1E-05 \
+-num_threads 20 \
+-max_target_seqs 1 \
+-max_hsps 1 \
+-outfmt 6 \
+> ../output/06-Go-3-species/pis_blastx_sp-raven.out 2>&1
+
+echo "done"
+```
+
