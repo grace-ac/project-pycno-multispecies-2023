@@ -1,0 +1,28 @@
+---
+title: "08-trinity-unmapped"
+output: github_document
+date: "2024-11-07"
+author: Steven Roberts
+---
+
+```{bash}
+curl -O https://gannet.fish.washington.edu/seashell/bu-github/project-pycno-multispecies-2023/output/04-pyc-hisat/PSC-0519_unmapped_reads.1.fastq
+```
+
+
+```{bash}
+curl -O https://gannet.fish.washington.edu/seashell/bu-github/project-pycno-multispecies-2023/output/04-pyc-hisat/PSC-0519_unmapped_reads.2.fastq
+```
+
+```{bash}
+export PATH=/home/shared/jellyfish-2.3.0/bin:$PATH
+export PATH=/home/shared/bowtie2-2.4.4-linux-x86_64/:$PATH
+export PATH=/home/shared/salmon-1.4.0_linux_x86_64/bin:$PATH
+/home/shared/trinityrnaseq-v2.12.0/Trinity \
+--seqType fq \
+--max_memory 180G \
+--CPU 30 \
+--left ../output/04-pyc-hisat/PSC-0519_unmapped_reads.1.fastq \
+--right ../output/04-pyc-hisat/PSC-0519_unmapped_reads.2.fastq \
+--output ../output/08-trinity-unmapped
+```
