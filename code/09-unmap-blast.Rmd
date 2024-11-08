@@ -26,14 +26,14 @@ fasta="../output/08-trinity-unmapped/Trinity.fasta"
 blastn \
 -query $fasta \
 -db ../data/blastdb/nt_prok \
--out ../output/09-unmap-blast/unmap_blastn_nrprok.tab \
+-out ../output/09-unmap-blast/unmap_blastn_ntprok.tab \
 -task blastn \
 -evalue 1E-20 \
 -num_threads 30 \
 -max_target_seqs 1 \
 -max_hsps 1 \
 -outfmt 6 \
-> ../output/09-unmap-blast/unmap_blastn_nrprok.log 2>&1
+> ../output/09-unmap-blast/unmap_blastn_ntprok.log 2>&1
 
 echo "done"
 ```
