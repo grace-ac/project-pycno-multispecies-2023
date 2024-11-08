@@ -11,5 +11,5 @@ data/ncbi_dataset/*
 data/genome*
 data/Swiss*
 output/05-pis-annot/trinity
-output/06-trinity-unmapped/*
+output/08-trinity-unmapped/*
 
